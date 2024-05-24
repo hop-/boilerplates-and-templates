@@ -1,0 +1,26 @@
+{
+  "app": {
+    "port": 3000,
+    "https": {
+      "enabled": false,
+      "certificatePath": "certs/cert.pem",
+      "keyPath": "certs/key.pem"
+    }
+  },
+  "db": {
+    "pgTypeOrm": {
+      "user": "api",
+      "port": 5432
+    },
+    "mongo": {
+      "user": "api",
+      "url": ""
+    },
+    "mongodb": {
+      "uri": ""
+    }
+  },
+  "auth": {
+    "apiKey": ""
+  }
+}

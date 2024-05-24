@@ -1,0 +1,28 @@
+FROM node:20-alpine AS dev-build
+WORKDIR /build
+COPY package.json package-lock.json ./
+RUN npm ci --omit=optional
+COPY . .
+RUN npm run generate:routes \
+    && npm run prisma:generate
+RUN npm run lint
+
+FROM node:20-alpine as dev
+WORKDIR /app
+COPY --from=dev-build /build .
+CMD ["npm", "run", "start:dev"]
+
+FROM node:20-alpine AS prod-build
+WORKDIR /build
+COPY --from=dev-build /build .
+RUN npm run build
+
+FROM node:20-alpine AS prod
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev \
+    && npm cache clean --force
+COPY --from=prod-build /build/build ./build
+COPY --from=prod-build /build/node_modules/@prisma/client/ ./node_modules/@prisma/client/
+COPY . .
+CMD ["npm", "run", "start:prod"]

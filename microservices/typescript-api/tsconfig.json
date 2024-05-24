@@ -1,0 +1,47 @@
+{
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"lib": [
+			"ES2015",
+			"ES2016",
+			"ES2017",
+			"ES2018",
+			"ES2019",
+			"ES2020",
+			"ES2021",
+			"ES2022",
+			"ES2023"
+    ],
+		"rootDir": "src",
+		"outDir": "build",
+		"strict": true,
+		"alwaysStrict": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"downlevelIteration": true,
+		"declaration": true,
+		"pretty": true,
+		"sourceMap": true
+	},
+	"types": [
+		"node"
+	],
+	"include": [
+		"src/**/*"
+	],
+	"typeRoots": [
+		"./node_modules/@types/"
+	]
+}

@@ -1,0 +1,8 @@
+FROM python:3.10-bookworm as base
+COPY --from=node:20-bookworm / /
+WORKDIR /app
+
+FROM base as main
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
+COPY . .

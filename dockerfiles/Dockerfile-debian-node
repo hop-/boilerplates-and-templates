@@ -1,0 +1,37 @@
+FROM node:20-bookworm AS main
+RUN apt update \
+    && apt install wget unzip \
+    && apt clean -y \
+    && rm -rf /var/lib/apt/lists/*
+RUN cd /usr/src \
+    && wget https://www.python.org/ftp/python/3.10.10/Python-3.10.10.tgz \
+    && tar xzf Python-3.10.10.tgz \
+    && cd Python-3.10.10 \
+    && ./configure --enable-optimizations \
+    && make install \
+    && python3 -m pip install --upgrade pip
+WORKDIR /app
+
+FROM node:20-alpine AS dev-build
+WORKDIR /build
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run lint
+
+FROM main as dev
+COPY --from=dev-build /build .
+CMD ["npm", "run", "start:dev"]
+
+FROM node:20-alpine AS prod-build
+WORKDIR /build
+COPY --from=dev-build /build .
+RUN npm run build
+
+FROM main AS prod
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev \
+    && npm cache clean --force
+COPY --from=prod-build /build/dist ./dist
+COPY . .
+CMD ["node", "dist/index.js"]

@@ -1,0 +1,39 @@
+{
+  "app": {
+    "port": {
+      "__name": "PORT",
+      "__format": "number"
+    },
+    "https": {
+      "enabled": {
+        "__name": "HTTPS_ENABLED",
+        "__format": "boolean"
+      },
+      "certificatePath": "HTTPS_CERT_PATH",
+      "keyPath":  "HTTPS_KEY_PATH"
+    }
+  },
+  "db": {
+    "pgTypeOrm": {
+      "host": "PG_HOST",
+      "port": {
+        "__name": "PG_PORT",
+        "__format": "number"
+      },
+      "user": "PG_USER",
+      "password": "PG_PASSWORD",
+      "db": "PG_DATABASE"
+    },
+    "mongo": {
+      "user": "MONGO_USER",
+      "password": "MONGO_PASSWORD",
+      "url": "MONGO_URL"
+    },
+    "mongodb": {
+      "uri": "MONGO_DB_URI"
+    }
+  },
+  "auth": {
+    "apiKey": "API_KEY"
+  }
+}
