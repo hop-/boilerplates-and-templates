@@ -13,6 +13,7 @@ dist/
 !pm2.*.config.json
 !tsconfig.json
 !.eslintrc.json
+!.mocharc.json
 !tsoa.json
 
 src/routes/*.ts

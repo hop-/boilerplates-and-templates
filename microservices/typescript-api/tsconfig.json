@@ -14,7 +14,7 @@
 			"ES2022",
 			"ES2023"
     ],
-		"rootDir": "src",
+		"rootDirs": ["src"],
 		"outDir": "build",
 		"strict": true,
 		"alwaysStrict": true,
@@ -39,7 +39,7 @@
 		"node"
 	],
 	"include": [
-		"src/**/*"
+		"src/**/*",
 	],
 	"typeRoots": [
 		"./node_modules/@types/"

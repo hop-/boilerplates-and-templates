@@ -1,0 +1,6 @@
+{
+  "require": ["./mocha-register.js"],
+  "reporter": "spec",
+  "extension": ["ts"],
+  "spec": ["test/**/*.spec.ts"]
+}
