@@ -4,4 +4,7 @@ async function main() {
   await app.startCli();
 }
 
-main().catch(console.error);
+main().catch((e) => {
+  console.error('Failed:', e);
+  process.exit(1);
+});

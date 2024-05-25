@@ -4,4 +4,7 @@ async function main() {
   await app.start();
 }
 
-main().catch(console.error);
+main().catch((e) => {
+  console.error('Appilaction failed:', e);
+  process.exit(1);
+});
