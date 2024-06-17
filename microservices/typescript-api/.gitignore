@@ -1,6 +1,6 @@
 # Node artifact files
 node_modules/
-dist/
+build/
 
 # JetBrains IDE
 .idea/

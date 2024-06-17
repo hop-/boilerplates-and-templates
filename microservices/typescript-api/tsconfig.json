@@ -12,7 +12,8 @@
 			"ES2020",
 			"ES2021",
 			"ES2022",
-			"ES2023"
+			"ES2023",
+			"ESNext"
     ],
 		"rootDirs": ["src"],
 		"outDir": "build",
@@ -36,10 +37,11 @@
 		"sourceMap": true
 	},
 	"types": [
-		"node"
+		"node", // use when node
+		//"bun-types", // use when bun
 	],
 	"include": [
-		"src/**/*",
+		"src/**/*"
 	],
 	"typeRoots": [
 		"./node_modules/@types/"

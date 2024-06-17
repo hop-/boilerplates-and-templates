@@ -4,3 +4,5 @@ dist/
 .idea/
 .git/
 .gitignore
+.env
+Dockerfile*

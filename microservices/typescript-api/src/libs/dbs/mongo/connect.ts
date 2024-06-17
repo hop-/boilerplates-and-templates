@@ -1,5 +1,5 @@
-import * as config from 'config';
 import mongoose, { model, Schema } from 'mongoose';
+import config = require('config');
 import { Migration } from './migration';
 import { ExampleMigration } from './migrations/example.migration';
 

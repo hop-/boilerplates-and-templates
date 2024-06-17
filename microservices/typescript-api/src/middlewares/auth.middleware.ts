@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import * as config from 'config';
+import config = require('config');
 import { NotAuthorizedError } from '../libs/errors/not-authorized.error';
 
 const serviceApiKey = config.get<string>('auth.apiKey');

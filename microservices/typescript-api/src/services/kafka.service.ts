@@ -1,7 +1,8 @@
 import Bluebird = require('bluebird');
-import { KafkaConsumer, KafkaProducer } from '../libs/brokers/kafka';
 import { IService } from '../libs/interfaces/service.interface';
 import { exampleHandler } from '../handlers/example.handler';
+import { KafkaConsumer } from '../libs/brokers/kafka/consumer';
+import { KafkaProducer } from '../libs/brokers/kafka/producer';
 
 // eslint-disable-next-line no-shadow
 export enum Topics {

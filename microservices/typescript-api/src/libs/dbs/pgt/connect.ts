@@ -1,5 +1,5 @@
+import config = require('config');
 import { DataSource } from 'typeorm';
-import * as config from 'config';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isTsNode = !!(process as any)[Symbol.for('ts-node.register.instance')];
