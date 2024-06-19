@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as https from 'https';
 import * as http from 'http';
 // Init configurations
-import config = require('config');
+import config from 'config';
 // Configure to handle async errors in express
 import 'express-async-errors';
 import * as cors from 'cors';

@@ -1,4 +1,4 @@
-import config = require('config');
+import config from 'config';
 import { DataSource } from 'typeorm';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

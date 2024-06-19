@@ -71,9 +71,9 @@ export abstract class Application {
 
   public async startCli() {
     // eslint-disable-next-line import/no-extraneous-dependencies, global-require
-    const tsnode = require('ts-node');
+    const tsnode = await import('ts-node');
     // eslint-disable-next-line import/no-extraneous-dependencies, global-require
-    const ts = require('typescript');
+    const ts = await import('typescript');
 
     // Initialize
     await this.init();

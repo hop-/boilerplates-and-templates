@@ -1,4 +1,4 @@
-import config = require('config');
+import config from 'config';
 import { Db, MongoClient } from 'mongodb';
 
 const URL = config.get<string>('db.mongodb.uri');

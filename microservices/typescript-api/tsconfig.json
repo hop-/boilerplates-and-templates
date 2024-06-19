@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
 		"target": "ES2018",
-		"module": "commonjs",
-		"moduleResolution": "node",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
 		"lib": [
 			"ES2015",
 			"ES2016",
@@ -38,12 +38,16 @@
 	},
 	"types": [
 		"node", // use when node
-		//"bun-types", // use when bun
+		"bun-types", // use when bun
 	],
 	"include": [
 		"src/**/*"
 	],
 	"typeRoots": [
 		"./node_modules/@types/"
-	]
+	],
+	"ts-node": {
+   	"esm": true,
+   	"experimentalSpecifierResolution": "node"
+	},
 }

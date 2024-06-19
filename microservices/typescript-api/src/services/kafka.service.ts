@@ -1,4 +1,4 @@
-import Bluebird = require('bluebird');
+import Bluebird from 'bluebird';
 import { IService } from '../libs/interfaces/service.interface';
 import { exampleHandler } from '../handlers/example.handler';
 import { KafkaConsumer } from '../libs/brokers/kafka/consumer';

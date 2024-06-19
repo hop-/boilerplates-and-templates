@@ -1,7 +1,7 @@
 FROM oven/bun:1-alpine AS dev-build
 WORKDIR /build
 COPY package.json bun.lockb ./
-RUN bun add -d @types/bun
+#RUN bun add -d @types/bun
 RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run generate:routes \
@@ -16,17 +16,14 @@ CMD ["bun", "src/index.ts"]
 FROM oven/bun:1-alpine AS prod-build
 WORKDIR /build
 COPY --from=dev-build /build .
-RUN bun remove @types/node
-RUN rm -rf node_modules/@types/node
-#RUN bun run build
+RUN bun run build
 
 FROM oven/bun:1-alpine AS prod
 WORKDIR /app
 COPY package.json bun.lockb ./
 RUN bun add -d @types/bun
 RUN bun install --frozen-lockfile --production
-#COPY --from=prod-build /build/build ./build
+COPY --from=prod-build /build/build ./build
 COPY --from=prod-build /build/node_modules/@prisma/client/ ./node_modules/@prisma/client/
 COPY . .
-#CMD ["bun", "build/index.js"]
-CMD ["bun", "src/index.ts"]
+CMD ["bun", "build/index.js"]

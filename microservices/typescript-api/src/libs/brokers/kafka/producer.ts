@@ -1,4 +1,4 @@
-import { CompressionTypes, Producer } from 'kafkajs';
+import kafkajs from 'kafkajs';
 import kafkaClient from './kafka-client';
 
 export interface IKafkaProducerSendOptions {
@@ -7,7 +7,7 @@ export interface IKafkaProducerSendOptions {
 }
 
 export class KafkaProducer {
-  private producer: Producer;
+  private producer: kafkajs.Producer;
 
   constructor() {
     this.producer = kafkaClient.producer();
@@ -42,7 +42,7 @@ export class KafkaProducer {
     await this.producer.send({
       topic,
       messages: [{ value: JSON.stringify(message) }],
-      compression: CompressionTypes.GZIP,
+      compression: kafkajs.CompressionTypes.GZIP,
     });
     console.log('Message has published');
   }

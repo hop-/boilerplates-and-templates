@@ -1,6 +1,4 @@
-import {
-  Consumer, ConsumerConfig, KafkaMessage,
-} from 'kafkajs';
+import kafkajs from 'kafkajs';
 import * as Bluebird from 'bluebird';
 import kafkaClient from './kafka-client';
 
@@ -16,15 +14,15 @@ export class KafkaConsumer {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private messageHandler: (payload: any) => Promise<void>;
 
-  private consumer: Consumer;
+  private consumer: kafkajs.Consumer;
 
-  private kafkaOptions: ConsumerConfig;
+  private kafkaOptions: kafkajs.ConsumerConfig;
 
   constructor(
     groupId: string,
     private topics: string[],
     private retry: boolean | number = false,
-    options?: ConsumerConfig,
+    options?: kafkajs.ConsumerConfig,
   ) {
     this.kafkaOptions = { ...kafkaDefaultOptions, ...options, groupId };
     this.consumer = kafkaClient.consumer(this.kafkaOptions);
@@ -47,13 +45,13 @@ export class KafkaConsumer {
 
   public async run(): Promise<void> {
     let messageHandler: (
-      message: KafkaMessage,
+      message: kafkajs.KafkaMessage,
       resolveOffset: (offset: string) => void,
       heartbeat: () => Promise<void>
     ) => Promise<void>;
     if (this.retry === true) {
       messageHandler = async (
-        message: KafkaMessage,
+        message: kafkajs.KafkaMessage,
         resolveOffset: (offset: string) => void,
         heartbeat: () => Promise<void>,
       ) => {
@@ -64,7 +62,7 @@ export class KafkaConsumer {
       };
     } else if (typeof (this.retry) === 'number' && this.retry > 0) {
       messageHandler = async (
-        message: KafkaMessage,
+        message: kafkajs.KafkaMessage,
         resolveOffset: (offset: string) => void,
         heartbeat: () => Promise<void>,
       ) => {
@@ -84,7 +82,7 @@ export class KafkaConsumer {
       };
     } else {
       messageHandler = async (
-        message: KafkaMessage,
+        message: kafkajs.KafkaMessage,
         resolveOffset: (offset: string) => void,
         heartbeat: () => Promise<void>,
       ) => {

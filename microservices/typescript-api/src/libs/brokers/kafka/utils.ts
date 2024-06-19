@@ -1,10 +1,10 @@
-import { ITopicConfig } from 'kafkajs';
+import kafkajs from 'kafkajs';
 import kafkaClient from './kafka-client';
 
-export type IKafkaTopicConfig = ITopicConfig;
+export type IKafkaTopicConfig = kafkajs.ITopicConfig;
 
 export class KafkaUtils {
-  static async createTopics(topics: ITopicConfig[]): Promise<boolean> {
+  static async createTopics(topics: kafkajs.ITopicConfig[]): Promise<boolean> {
     const admin = kafkaClient.admin();
     await admin.connect();
 

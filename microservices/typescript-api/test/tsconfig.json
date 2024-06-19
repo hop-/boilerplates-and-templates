@@ -1,12 +1,12 @@
 {
   "extends": "../tsconfig.json",
 	"compilerOptions": {
-    "rootDirs": ["./", "../src"],
+    "rootDirs": ["./", "../src"]
 	},
 	"types": [
 		"node"
 	],
 	"include": [
-    "./**/*",
-	],
+    "./**/*"
+	]
 }
