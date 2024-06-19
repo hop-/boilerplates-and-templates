@@ -11,7 +11,7 @@
     "start": "ts-node src/index.ts",
     "start:console": "ts-node src/console.ts",
     "start:dev": "ts-node-dev --exit-child --inspect=0.0.0.0:9229 src/index.ts",
-    "start:prod": "node build/index.js",
+    "start:prod": "node --experimental-specifier-resolution=node build/index.js",
     "prisma:init": "prisma dev --name init",
     "prisma:generate": "prisma generate",
     "test": "mocha"
