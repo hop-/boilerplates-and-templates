@@ -1,0 +1,176 @@
+name: infra
+
+x-logging:
+  &default-logging
+  driver: json-file
+  options:
+    max-size: 5m
+    max-file: 3
+services:
+  some-service-example:
+    logging: *default-logging
+    build:
+      context: ../{{path-to-service}}
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 3000:3000
+    env_file:
+      - ../{{path-to-service/.env
+    volumes:
+      - ../{{path-to-service}}/src:/app/src:delegate
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres-db:
+        condition: service_healthy
+    command: npm start
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    restart: always
+    logging: *default-logging
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9094,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
+      KAFKA_LOG4J_LOGGERS: 'kafka.controller=ERROR,kafka.producer.async.DefaultEventHandler=ERROR,state.change.logger=ERROR'
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+    healthcheck:
+      test: nc -z localhost 9092
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    restart: always
+    logging: *default-logging
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+      test: nc -z localhost 2181
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
+  kafka-ui:
+    logging: *default-logging
+    image: provectuslabs/kafka-ui:latest
+    restart: always
+    ports:
+      - 9080:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: 'kafka'
+      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: 'kafka:9094'
+      KAFKA_CLUSTERS_0_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+    depends_on:
+      kafka:
+        condition: service_healthy
+  kafbat-ui:
+    logging: *default-logging
+    image: ghcr.io/kafbat/kafka-ui:latest
+    restart: always
+    ports:
+      - 9080:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: 'kafka'
+      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: 'kafka:9094'
+      KAFKA_CLUSTERS_0_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+    depends_on:
+      kafka:
+        condition: service_healthy
+  red-panda:
+    logging: *default-logging
+    image: docker.redpanda.com/redpandadata/console:latest
+    restart: always
+    ports:
+      - 9080:8080
+    environment:
+      KAFKA_BROKERS: 'kafka:9094'
+    depends_on:
+      kafka:
+        condition: service_healthy
+  redis:
+    image: redis:alpine
+    restart: always
+    logging: *default-logging
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 5s
+    volumes:
+      - redis-data:/data
+    command: [
+      "redis-server",
+      # Uncomment the line below to set a password
+      # "--requirepass", "mysecretpassword",
+      "--appendonly", "yes"
+    ]
+  postgres-db:
+    image: postgres:latest
+    restart: always
+    logging: *default-logging
+    ports:
+      - 5432:5432
+    environment:
+      PGDATA: /var/lib/postgresql/pgdata-dev
+      POSTGRES_DB: $POSTGRES_DB_NAME
+      POSTGRES_USER: $POSTGRES_DB_USER
+      POSTGRES_PASSWORD: $POSTGRES_DB_PASSWORD
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+    volumes:
+      - $HOME/docker/volumes/permissions-db:/var/lib/postgresql/pgdata-dev
+  mysql-db:
+    image: mysql:latest
+    restart: always
+    logging: *default-logging
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_DB_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DB_NAME
+      MYSQL_USER: $MYSQL_DB_USER
+      MYSQL_PASSWORD: $MYSQL_DB_PASSWORD
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", '-p"$$MYSQL_ROOT_PASSWORD"']
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+    volumes:
+      - $HOME/docker/volumes/monolith-db:/var/lib/mysql
+volumes:
+  zookeeper-data:
+    driver: local
+  zookeeper-log:
+    driver: local
+  kafka-data:
+    driver: local
+  redis-data:
+    driver: local
+
